@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: hello-gateway-service
+  cloud:
+    loadbalancer:
+      enabled: true
+    gateway:
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':         #适用所有的路径
+#            allowed-origins:         #允许跨域访问的客户端来源的域名，*表示所有
+#              - "*"
+#            allowed-methods:         #允许的HTTP请求方式
+#              - "*"
+#            allowed-headers:         #允许的HTTP请求头
+#              - "*"
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: provider-route
+          uri:
+            lb://hello-provider-service
+          order: 1            #????????????????????0
+          predicates:
+            - Path=/greet/**  #????????**????
+        - id: consumer-route
+          uri:
+            lb://hello-consumer-service
+          order: 1
+          predicates:
+            - Path=/enter/**
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8810
+server:
+  port: 80
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: 'gateway'

@@ -1,0 +1,62 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: hello-provider-service
+  cloud:
+    stream:
+      function:
+        definition: sendBody;mydate;msgs;sendMessage
+      rocketmq:
+        binder:
+          name-server: 127.0.0.1:9876        #NameServer的地址
+          group: service-group
+      bindings:
+        service-out-0:              #输出通道
+          destination: service-topic  #输出通道的目的地，此处表示RocketMQ的消息主题
+        mymsg-out-0: #输出通道
+          destination: mymsg-topic
+        mydate-out-0:
+          destination: date-topic
+        msgs-out-0:
+          destination: msgs-topic
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8810
+#  main:
+#    allow-bean-definition-overriding: true
+#    allow-circular-references: true
+#  cloud:
+#    sentinel:
+#      transport:
+#        dashboard: 127.0.0.1:8080
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 172.26.86.128:8848
+#        namespace: 6ee54f4f-25fb-46cf-af23-9210e9d7cdc2
+#        group: MY_GROUP
+#dubbo:
+#  application:
+#    name: hello-provider-service
+#    qos-enable: false
+#  registry:
+#    address: nacos://127.0.0.1:8810
+#    parameters:
+#      namespace: a71212c7-136f-4f79-8ba2-b5c2441811cd
+#      group: MY_GROUP
+#  scan:
+#    base-packages: demo.helloprovider
+#  protocol:
+#    name: dubbo
+#    port: -1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+
+

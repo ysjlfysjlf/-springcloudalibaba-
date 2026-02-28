@@ -1,0 +1,103 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: hello-consumer-service
+  cloud:
+    function:
+      definition: mydate;msgs;mymsg;mybody
+    stream:
+      rocketmq:
+        binder:
+          name-server: 127.0.0.1:9876
+      bindings:
+        mybody-in-0:         #输入通道
+          destination: service-topic       #输入通道的目的地
+          content-type: application/json
+          group: service-group             #所在的消费组
+        mymsg-in-0:
+          destination: mymsg-topic
+          content-type: application/json
+          group: service-group
+        mydate-in-0:
+          destination: date-topic
+          content-type: application/json
+          group: service-group
+        msgs-in-0:
+          destination: msgs-topic
+          content-type: application/json
+          group: service-group
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8810
+#  main:
+#    allow-bean-definition-overriding: true
+#    allow-circular-references: true
+#  cloud:
+#    sentinel:
+#      transport:
+#        dashboard: 127.0.0.1:8080
+#      datasource:
+#        ds1:
+#          nacos:
+#            server-addr: 127.0.0.1:8810
+#            data-id: hello-consumer-ds1
+#            group-id: DEFAULT_GROUP
+#            namespace: a71212c7-136f-4f79-8ba2-b5c2441811cd
+#            rule-type: flow
+
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 172.26.86.128:8848
+#        namespace: 6ee54f4f-25fb-46cf-af23-9210e9d7cdc2
+#        group: MY_GROUP
+#dubbo:
+#  application:
+#    name: hello-consumer-service
+#    qos-enable: false
+#  cloud:
+#    subscribed-services: hello-provider-service
+#  registry:
+#    address: nacos://127.0.0.1:8810
+#    parameters:
+#      namespace: a71212c7-136f-4f79-8ba2-b5c2441811cd
+#      group: MY_GROUP
+#  scan:
+#    base-packages: demo.helloconsumer
+#  protocol:
+#    name: dubbo
+#    port: -1
+#    openfeign:
+#      compression:
+#        request:
+#          enabled: true
+#          mime-types: text/xml, application/xml, application/json
+#          min-request-size: 2048
+#        response:
+#          enabled: true
+#      client:
+#        config:
+#          default:
+#            connect-timeout: 1000
+#            read-timeout: 5000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+#
+#provider:
+#  name: hello-provider-service
+#
+#logging:
+#  level:
+#    demo:
+#      hello consumer:
+#        services:
+#          HelloFeignService: debug
+#
+#feign:
+#  sentinel:
+#    enabled: true
